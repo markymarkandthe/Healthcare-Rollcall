@@ -76,19 +76,46 @@
                         </b-card>
                     </b-col>
                 </b-row>
+                <b-row>
+                    <b-col>
+                        <b-card title="Map">
+                            <div class="map-container" v-if="data.latlng">
+                                <l-map
+                                :zoom="zoom"
+                                :center="center"
+                                >
+                                    <l-tile-layer :url="url">
+                                    </l-tile-layer>
+                                    <l-marker :lat-lng="data.latlng"></l-marker>
+                                </l-map>
+                            </div>
+                        </b-card>
+                    </b-col>
+                </b-row>
             </b-col>
         </b-row>
     </b-container>
 </template>
 
 <script>
-    import axios from 'axios'
+    import axios from 'axios';
+    import { latLng } from "leaflet";
+    import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+
 
     export default {
         name: "Facility",
+        components: {
+            LMap,
+            LTileLayer,
+            LMarker
+        },
         data() {
             return {
                 api: this.$root.$data.apiEndpoint,
+                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                center: latLng(39.3, -76.6),
+                zoom: 11,
                 data: {
                     name: ""
                 }
@@ -128,5 +155,9 @@
     }
     .address-line {
         display: block;
+    }
+    .map-container {
+        width: 100%;
+        height: 400px;
     }
 </style>
